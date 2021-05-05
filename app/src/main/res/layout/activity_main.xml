@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/sendCode"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="50dp"
+        android:text="获取验证码"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCode" />
+
+    <Button
+        android:id="@+id/getFlow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="72dp"
+        android:text="领取流量"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editCode" />
+
+    <EditText
+        android:id="@+id/editPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="请输入联通手机号码"
+        android:maxLength="11"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:maxLength="4"
+        android:ems="10"
+        android:hint="请输入验证码"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPhone" />
+
+    <TextView
+        android:id="@+id/introduceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="使用说明"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent " />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:windowSoftInputMode="adjustPan">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1、首先填写手机号码，然点击获取验证码，手机收到短信后，填入收到的手机验证码，再点击领取流量，点击领取流量后，请您留意手机短信，请勿重复提交，收到短信即流量领取成功，反之则领取失败或当月已领取完流量；\n\n2、联通用户每天可领取90M全国流量，每次30M，每月可领取10次，共计300M流量，可适用于短时间内使用和临时使用，在领取后，流量会在24小时内充值到账，具体请以收到的短信提醒为准，领取成功后可登录联通手机营业厅APP查询，流量自到帐后即时生效，有效期三个月；\n\n3、每天发送验证码超过三次后当天将不会再收到验证码，当月领取达到10次后将可能不会再收到短信，另外每月的第一天和最后一天无法领取流量，其他时间均可正常领取；"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
