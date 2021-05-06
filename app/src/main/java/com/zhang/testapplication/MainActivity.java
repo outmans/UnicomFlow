@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int CODESUCCESS = 1;
     public static final int FLOWSUCCESS = 2;
     public static final int REPEATCODE = 3;
-    public static final int FAILCODE = 4;
 
     EditText phoneText;
     EditText codeText;
@@ -45,9 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case REPEATCODE:
                     Toast.makeText(MainActivity.this,"一天最多只能发送三次短信",Toast.LENGTH_LONG).show();
-                    break;
-                case FAILCODE:
-                    Toast.makeText(MainActivity.this,"验证码错误",Toast.LENGTH_LONG).show();
                     break;
                 default:
                     if (respMsg == null){
@@ -140,12 +136,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String responseBody = response.body().string();
                     JSONObject jsonObject = JSONObject.parseObject(responseBody);
                     respCode = (String) jsonObject.get("respCode");
-                    respMsg = (String) jsonObject.get("RespMsg");
+                    respMsg = (String) jsonObject.get("respDesc");
                     Message message = new Message();
                     if ("0000".equals(respCode)){
                         message.what = FLOWSUCCESS;
-                    }else if("1001".equals(respCode)){
-                        message.what = FAILCODE;
                     }else {
                         message.what = FAIL;
                     }
