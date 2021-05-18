@@ -2,6 +2,7 @@ package com.zhang.testapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -65,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getFlow.setOnClickListener(this);
         phoneText = (EditText) findViewById(R.id.editPhone);
         codeText = (EditText) findViewById(R.id.editCode);
+        //还原SharedPreferences中储存的手机号，免得重复输入手机号
+        SharedPreferences flowPhone = getSharedPreferences("flowPhone", MODE_PRIVATE);
+        String phone = flowPhone.getString("phone","");
+        phoneText.setText(phone);
+        //把光标移到最后
+        phoneText.setSelection(phone.length());
     }
 
     @Override
@@ -78,39 +85,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //储存手机号到SharedPreferences
+        SharedPreferences.Editor editor = getSharedPreferences("flowPhone", MODE_PRIVATE).edit();
+        editor.putString("phone",phoneText.getText().toString());
+        editor.apply();
+    }
+
     private void sendCode(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String phone = phoneText.getText().toString();
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("phoneVal", phone)
-                            .add("type", String.valueOf(21))
-                            .build();
-                    Request request = new Request.Builder()
-                            .url("https://m.10010.com/god/AirCheckMessage/sendCaptcha")
-                            .post(requestBody)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseBody = response.body().string();
-                    JSONObject jsonObject = JSONObject.parseObject(responseBody);
-                    respCode = (String) jsonObject.get("RespCode");
-                    respMsg = (String) jsonObject.get("RespMsg");
-                    Message message = new Message();
-                    if ("0000".equals(respCode)){
-                        message.what = CODESUCCESS;
-                    }else if ("10001".equals(respCode)){
-                        message.what = REPEATCODE;
-                    }else {
-                        message.what = FAIL;
-                    }
-                    handler.sendMessage(message);
-                    Log.d("发送验证码的接口返回值", responseBody);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {
+                String phone = phoneText.getText().toString();
+                OkHttpClient client = new OkHttpClient();
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("phoneVal", phone)
+                        .add("type", String.valueOf(21))
+                        .build();
+                Request request = new Request.Builder()
+                        .url("https://m.10010.com/god/AirCheckMessage/sendCaptcha")
+                        .post(requestBody)
+                        .build();
+                Response response = client.newCall(request).execute();
+                String responseBody = response.body().string();
+                JSONObject jsonObject = JSONObject.parseObject(responseBody);
+                respCode = (String) jsonObject.get("RespCode");
+                respMsg = (String) jsonObject.get("RespMsg");
+                Message message = new Message();
+                if ("0000".equals(respCode)){
+                    message.what = CODESUCCESS;
+                }else if ("10001".equals(respCode)){
+                    message.what = REPEATCODE;
+                }else {
+                    message.what = FAIL;
                 }
+                handler.sendMessage(message);
+                Log.d("发送验证码的接口返回值", responseBody);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }
